@@ -1,8 +1,5 @@
 spring:
   application:
-    name: hogwarts
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, info
+    name: hogwarts-app
+  profiles:
+    active: dev # Activate the 'dev' profile by default
