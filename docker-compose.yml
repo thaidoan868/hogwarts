@@ -1,0 +1,22 @@
+services:
+  app:
+    image: ${REGISTER}/hogwarts-app:0.1.0
+    container_name: hogwarts-app
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-staging}
+
+#      # JDBC (match your application-staging.yml or override it here)
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-hogwarts}
+#      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-hogwarts}
+#      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-hogwarts_pw}
+
+      # Redis
+#      SPRING_DATA_REDIS_HOST: redis
+#      SPRING_DATA_REDIS_PORT: 6379
+
+    ports:
+      - "${APP_PORT:-8081}:8081"
+    restart: unless-stopped
+    build:
+      context:
+        ./

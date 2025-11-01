@@ -1,5 +1,5 @@
+server:
+  port: 8081
 spring:
   application:
     name: hogwarts-app
-  profiles:
-    active: dev # Activate the 'dev' profile by default
