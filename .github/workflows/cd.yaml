@@ -12,6 +12,7 @@ permissions:
   contents: read
 
 env:
+  AWS_REGION: ap-southeast-1
   DOCKER_IMAGE: thaidoan868/hogwarts-app
   TF_DIR: deploy
 
@@ -30,6 +31,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
