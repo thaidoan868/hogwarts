@@ -1,6 +1,6 @@
 services:
   app:
-    image: ${REGISTER}/hogwarts-app:0.1.0
+    image: ${REGISTER}/hogwarts-app
     container_name: hogwarts-app
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-staging}
@@ -20,3 +20,6 @@ services:
     build:
       context:
         ./
+      tags:
+        - ${REGISTER}/hogwarts-app:0.1.0
+        - ${REGISTER}/hogwarts-app:latest

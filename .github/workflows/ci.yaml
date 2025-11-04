@@ -1,4 +1,4 @@
-name: CI - Hogwarts App (dev)
+name: CI - Hogwarts App (dev branch)
 
 on:
   push:
