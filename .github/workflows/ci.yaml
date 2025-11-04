@@ -1,4 +1,4 @@
-name: CI - Hogwarts App (dev branch)
+name: CI - Build and Push to Dockerhub (dev branch)
 
 on:
   push:

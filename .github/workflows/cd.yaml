@@ -1,26 +1,25 @@
-name: Manual Deploy to ECS - Hogwarts (staging branch)
+name: CD - Terraform Deploy TaskDef
 
 on:
   workflow_dispatch:
-    branches:
-      - staging
     inputs:
       version:
-        description: "Docker image version to deploy (e.g. 0.2, dev, latest)"
+        description: "Docker image version to deploy (e.g. 0.1.0, dev, latest)"
         required: true
         default: "latest"
 
+permissions:
+  contents: read
+
 env:
-  AWS_REGION: ap-southeast-1
-  CLUSTER_NAME: hogwarts-cluster
-  SERVICE_NAME: hogwarts-app-service
-  FAMILY_NAME: hogwarts-app-task
-  CONTAINER_NAME: hogwarts-app
   DOCKER_IMAGE: thaidoan868/hogwarts-app
+  TF_DIR: deploy
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      VERSION_INPUT: ${{ github.event.inputs.version }}
 
     steps:
       - name: Checkout repo
@@ -31,44 +30,33 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
 
-      - name: Deploy ECS service
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.5
+
+      - name: Build image tag and persist
+        shell: bash
         run: |
-          IMAGE="${{ env.DOCKER_IMAGE }}:${{ github.event.inputs.version }}"
-          echo "Deploying version: $IMAGE"
+          IMAGE="${DOCKER_IMAGE}:${VERSION_INPUT}"
+          echo "Deploying image: ${IMAGE}"
+          echo "IMAGE=${IMAGE}" >> "$GITHUB_ENV"
 
-          # Get current task definition
-          TASK_DEF=$(aws ecs describe-task-definition \
-            --task-definition $FAMILY_NAME)
+      - name: Terraform init
+        working-directory: ${{ env.TF_DIR }}
+        env:
+          TF_IN_AUTOMATION: "true"
+        run: terraform init -input=false
 
-          # Replace image with selected version
-          NEW_TASK_DEF=$(echo $TASK_DEF | jq \
-            --arg IMAGE "$IMAGE" \
-            '.taskDefinition.containerDefinitions[0].image = $IMAGE |
-             {family: .taskDefinition.family,
-              containerDefinitions: .taskDefinition.containerDefinitions,
-              requiresCompatibilities: .taskDefinition.requiresCompatibilities,
-              networkMode: .taskDefinition.networkMode,
-              cpu: .taskDefinition.cpu,
-              memory: .taskDefinition.memory,
-              executionRoleArn: .taskDefinition.executionRoleArn,
-              taskRoleArn: .taskDefinition.taskRoleArn}')
+      - name: Terraform validate
+        working-directory: ${{ env.TF_DIR }}
+        run: terraform validate
 
-          echo "$NEW_TASK_DEF" > new-task-def.json
-
-          # Register new revision
-          NEW_TASK_DEF_ARN=$(aws ecs register-task-definition \
-            --cli-input-json file://new-task-def.json \
-            --query "taskDefinition.taskDefinitionArn" \
-            --output text)
-
-          echo "New task definition: $NEW_TASK_DEF_ARN"
-
-          # Update ECS service
-          aws ecs update-service \
-            --cluster $CLUSTER_NAME \
-            --service $SERVICE_NAME \
-            --task-definition $NEW_TASK_DEF_ARN
-
-          echo "ECS service updated successfully!"
+      - name: Terraform apply (update ECS Task Definition)
+        working-directory: ${{ env.TF_DIR }}
+        env:
+          TF_IN_AUTOMATION: "true"
+        run: |
+          terraform apply -auto-approve -input=false \
+            -var="docker_image=${IMAGE}"
