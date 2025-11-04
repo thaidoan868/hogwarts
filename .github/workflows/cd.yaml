@@ -2,6 +2,8 @@ name: Manual Deploy to ECS - Hogwarts (staging branch)
 
 on:
   workflow_dispatch:
+    branches:
+      - staging
     inputs:
       version:
         description: "Docker image version to deploy (e.g. 0.2, dev, latest)"
