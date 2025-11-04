@@ -1,4 +1,4 @@
-name: CD - Terraform Deploy TaskDef
+name: CD - Deploy to AWS ECS
 
 on:
   workflow_dispatch:
@@ -14,6 +14,8 @@ permissions:
 env:
   AWS_REGION: ap-southeast-1
   DOCKER_IMAGE: thaidoan868/hogwarts-app
+  CLUSTER_NAME: hogwarts-cluster
+  SERVICE_NAME: hogwarts-app-service
   TF_DIR: deploy
 
 jobs:
@@ -62,3 +64,19 @@ jobs:
         run: |
           terraform apply -auto-approve -input=false \
             -var="docker_image=${IMAGE}"
+
+      - name: Read new task definition ARN from Terraform
+        working-directory: ${{ env.TF_DIR }}
+        run: |
+          TASK_DEF_ARN="$(terraform output -raw task_def_arn)"
+          echo "TASK_DEF_ARN=${TASK_DEF_ARN}" >> "$GITHUB_ENV"
+          echo "New task def: ${TASK_DEF_ARN}"
+
+      - name: Update ECS service to use new task definition
+        run: |
+          aws ecs update-service \
+            --cluster "${CLUSTER_NAME}" \
+            --service "${SERVICE_NAME}" \
+            --task-definition "${TASK_DEF_ARN}" \
+            --force-new-deployment \
+            --region ${AWS_REGION}

@@ -1,4 +1,4 @@
-name: CI - Build and Push to Dockerhub (dev branch)
+name: CI - Push to Dockerhub (dev branch)
 
 on:
   push:
