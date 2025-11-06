@@ -1,0 +1,41 @@
+version: 1.0
+author: Thai Doan
+
+resources:
+  - wizard
+  - artifact
+
+policies:
+    - name: Public Wizard Access
+      rules:
+        role: anyone
+        condition: ~
+      resource: wizard
+      granted-permissions:
+        - read
+    - name : Admin Wizard Management
+      rules:
+        role: admin
+        condition: ~
+      resource: wizard
+      granted-permissions:
+        - create
+        - read
+        - update
+        - delete
+    - name: Public Profile Access
+      rules:
+        role: anyone
+        condition: ~
+      resource: profile
+      granted-permissions:
+        - read
+    - name: User Profile Management
+      rules:
+        role: user, admin, reviewer
+        condition:
+          - owner
+      resource: profile
+      granted-permissions:
+        - read
+        - update
