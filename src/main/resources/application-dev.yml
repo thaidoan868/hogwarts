@@ -2,10 +2,15 @@ management:
   endpoints:
     web:
       exposure:
-        include: health, info, metrics, prometheus
+        include: health, info
   endpoint:
     health:
       show-details: always
   metrics:
     tags:
-      application: ${spring.application.name}
+      application:
+keycloak:
+  server-url: http://localhost:8080
+  realm: hogwarts
+  client-id: backend
+  client-secret: APYtOv32HuVupfco6m0ltbf0RcXp1atx
