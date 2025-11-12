@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
-public class KeycloakAvailabilityHealth implements HealthIndicator {
+public class Keycloak implements HealthIndicator {
     private final WebClient webClient = WebClient.builder().build();
 
     @Value("${keycloak.server-url}")

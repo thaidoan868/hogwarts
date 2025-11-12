@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.conguyetduong.hogwarts.app.transfer.dto.user.RegisterUserRequest;
 import vn.conguyetduong.hogwarts.app.transfer.dto.user.RegisterUserResponse;
 import vn.conguyetduong.hogwarts.app.transfer.mapper.UserMapper;
-import vn.conguyetduong.hogwarts.core.service.UserService;
+import vn.conguyetduong.hogwarts.business.service.UserService;
 import vn.conguyetduong.hogwarts.infra.model.User;
 
 @RestController

@@ -1,4 +1,4 @@
-package vn.conguyetduong.hogwarts.core.service;
+package vn.conguyetduong.hogwarts.business.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
