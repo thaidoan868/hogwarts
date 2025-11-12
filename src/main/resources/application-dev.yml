@@ -18,13 +18,17 @@ spring:
         persistence:
           validation:
             mode: auto
-
   flyway:
     enabled: true
     locations: classpath:db/migration
     default-schema: public
     baseline-on-migrate: false
-logging.level.org.hibernate.SQL: debug
+  # Security Configuration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/hogwarts
 
 # Health Check
 management:

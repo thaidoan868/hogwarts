@@ -4,15 +4,17 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.*;
 import vn.conguyetduong.hogwarts.app.transfer.dto.user.RegisterUserRequest;
 import vn.conguyetduong.hogwarts.app.transfer.dto.user.RegisterUserResponse;
 import vn.conguyetduong.hogwarts.app.transfer.mapper.UserMapper;
 import vn.conguyetduong.hogwarts.business.service.UserService;
 import vn.conguyetduong.hogwarts.infra.model.User;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -29,4 +31,13 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new RegisterUserResponse(createdUser.getId()));
     }
+    @GetMapping("/me")
+    public Map<String, Object> me(@AuthenticationPrincipal Jwt jwt, Authentication auth) {
+        return Map.of(
+                "username", auth.getName(),
+                "kc_user_id", jwt.getSubject(),
+                "authorities", auth.getAuthorities()
+        );
+    }
+
 }

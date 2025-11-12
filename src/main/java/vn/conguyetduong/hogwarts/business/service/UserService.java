@@ -7,6 +7,7 @@ import vn.conguyetduong.hogwarts.infra.model.User;
 
 @Service
 @RequiredArgsConstructor
+
 public class UserService {
     private final KeycloakAdminClient keycloakAdapter;
 
