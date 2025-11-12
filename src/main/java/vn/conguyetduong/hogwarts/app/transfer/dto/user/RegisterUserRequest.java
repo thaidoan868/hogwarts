@@ -8,20 +8,21 @@ import lombok.Data;
 
 @Data
 public class RegisterUserRequest {
-    @NotBlank @Email
+    @NotBlank(message = "Email is required")
+    @Email
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Username is required")
+    @Pattern(regexp = "^\\S+$", message = "Username cannot contain spaces")
+    private String username;
+
+    @NotBlank(message = "Password is required")
     @Size(min = 8, max = 72, message = "Password must be 8–72 chars")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d).+$",
             message = "Password must contain letters and numbers")
     private String password;
 
-    @NotBlank
-    private String firstName;
+    private String firstName = "";
 
-    @NotBlank
-    private String lastName;
-
-    private String phone;
+    private String lastName = "";
 }
