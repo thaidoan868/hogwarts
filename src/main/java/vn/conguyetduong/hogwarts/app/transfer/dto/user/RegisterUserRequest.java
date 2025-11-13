@@ -23,7 +23,9 @@ public class RegisterUserRequest {
             message = "Password must contain letters and numbers")
     private String password;
 
-    private String firstName = "";
+    @NotBlank
+    private String firstName;
 
-    private String lastName = "";
+    @NotBlank
+    private String lastName;
 }

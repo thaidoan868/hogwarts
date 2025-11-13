@@ -2,13 +2,15 @@ package vn.conguyetduong.hogwarts.infra.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -16,6 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 public class Profile {
 
     @Id
@@ -23,16 +26,11 @@ public class Profile {
     @UuidGenerator
     private UUID id;
 
-    @NotBlank
-    private UUID keycloakUserId;              // token.getSubject() → UUID.fromString(sub)
+    @NotNull
+    private UUID keycloakUserId;
 
     @NotBlank
     private String keycloakRealm = "hogwarts";
-
-    @NotBlank
-    private String keycloakUsername;          // preferred_username
-
-    private String fullName;
 
     private String phoneNumber;
 
@@ -45,13 +43,12 @@ public class Profile {
     private String gender;
 
     @CreatedDate
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private OffsetDateTime updatedAt;
+    private LocalDateTime updatedAt;
 
-    public Profile(UUID keycloakUserId, String keycloakUsername) {
+    public Profile(UUID keycloakUserId) {
         this.keycloakUserId = keycloakUserId;
-        this.keycloakUsername = keycloakUsername;
     }
 }

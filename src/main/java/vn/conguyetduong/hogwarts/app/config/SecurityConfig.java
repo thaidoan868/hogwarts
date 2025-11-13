@@ -27,7 +27,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v*/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(oauth -> oauth
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter))
@@ -45,7 +45,6 @@ public class SecurityConfig {
         };
     }
 
-    @SuppressWarnings("unchecked")
     private Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
         var realmRoles = Optional.ofNullable((Map<String, Object>) jwt.getClaim("realm_access"))
                 .map(m -> (Collection<String>) m.get("roles"))

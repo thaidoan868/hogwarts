@@ -1,21 +1,32 @@
 package vn.conguyetduong.hogwarts.infra.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+
 import java.util.Objects;
+import java.util.UUID;
 
 @Data
 @Builder
+@AllArgsConstructor
 public class User {
-    private final String id;
-    private final String username;
-    private final String email;
-    private final String firstName;
-    private final String lastName;
-    private final String password;
-    private final boolean emailVerified;
+    private UUID id;
+    private String username;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String password;
+    private boolean isEmailVerified;
 
-    public String fullName() { return (firstName + " " + lastName).trim(); }
+    public String fullName() {
+        return (firstName + " " + lastName).trim();
+    }
+
+    public User(UUID id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {

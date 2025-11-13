@@ -14,6 +14,7 @@ import vn.conguyetduong.hogwarts.app.transfer.mapper.UserMapper;
 import vn.conguyetduong.hogwarts.business.service.UserService;
 import vn.conguyetduong.hogwarts.infra.model.User;
 
+import java.net.URI;
 import java.util.Map;
 
 @RestController
@@ -28,16 +29,8 @@ public class AuthController {
     public ResponseEntity<RegisterUserResponse> register(@Valid @RequestBody RegisterUserRequest userRequest) {
         User user = mapper.toUser(userRequest);
         User createdUser = service.register(user);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new RegisterUserResponse(createdUser.getId()));
-    }
-    @GetMapping("/me")
-    public Map<String, Object> me(@AuthenticationPrincipal Jwt jwt, Authentication auth) {
-        return Map.of(
-                "username", auth.getName(),
-                "kc_user_id", jwt.getSubject(),
-                "authorities", auth.getAuthorities()
-        );
-    }
+        URI location = URI.create("/api/v1/users/" + createdUser.getId());
 
+        return ResponseEntity.created(location).build();
+    }
 }
