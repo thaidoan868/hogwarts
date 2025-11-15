@@ -1,11 +1,53 @@
+spring:
+  # Database Configuration
+  jackson:
+    time-zone: Asia/Ho_Chi_Minh
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hogwarts
+    username: sa
+    password: sa123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.jdbc.time_zone: UTC
+      hibernate.format_sql: true
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+      javax:
+        persistence:
+          validation:
+            mode: auto
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    default-schema: public
+    baseline-on-migrate: false
+  # Security Configuration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/hogwarts
+
+# Health Check
 management:
   endpoints:
     web:
       exposure:
-        include: health, info, metrics, prometheus
+        include: health, info
   endpoint:
     health:
       show-details: always
   metrics:
     tags:
-      application: ${spring.application.name}
+      application:
+
+# Security Configuration
+keycloak:
+  server-url: http://localhost:8080
+  realm: hogwarts
+  client-id: backend
+  client-secret: APYtOv32HuVupfco6m0ltbf0RcXp1atx
