@@ -25,4 +25,10 @@ public class Utility {
     public UUID getCurrentUserId(){
         return UUID.fromString(jwt.getSubject());
     }
+
+    public static boolean isUsernameOrEmailError(String message) {
+        if (message == null) return false;
+        String m = message.toLowerCase();
+        return m.contains("username") || m.contains("email");
+    }
 }
