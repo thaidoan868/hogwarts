@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import vn.conguyetduong.hogwarts.infra.model.User;
 
-import java.util.List;
 import java.util.UUID;
 
 @Component
