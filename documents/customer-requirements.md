@@ -1,17 +1,8 @@
 # User Stories
 Headmasters at Hogwarts School want an application to manage their artifacts.
 
-## Artifact Management
-- A artifact has images, and owner history
-- As a guest I can find a artifact by id
-- As a guest I can view all artifacts
-- As a guest I can filter artifacts by their characteristics and most visited
-- As a contributor, I can propose a new artifact
-- As a contributor, I can propose updating a artifact
-- As a contributor, I can propose deleting a artifact
-
 ## Wizard Management
-- A wizard has images, and information, current-owned or ex-owned artifacts
+- A wizard has images, and information
 - As a guest I can find a wizard by id
 - As a guest I can view all wizards
 - As a guest I can filter wizards by their characteristics and most visited
@@ -20,20 +11,14 @@ Headmasters at Hogwarts School want an application to manage their artifacts.
 - As a contributor, I can propose deleting a wizard
 
 ## Comments
-- As a contributor I can comment on posts, articles, wizards
+- As a contributor I can comment on posts, wizards
 - As a contributor I can report a comment
-- As a reviewer, I can remove a comment
+- As an admin, I can remove a comment
 
-## Posts/questions
+## Posts
 - As a contributor, I can share a post
-- As a contributor, I can ask a question
 - As a contributor I can report a post
-- As a reviewer, I can remove a post
-
-## Articles
-- As a contributor, I can write an article
-- As a contributor I can report a article
-- As a reviewer, I can remove a article
+- As a admin, I can remove a post
 
 ## Chatting
 - As a contributor, I can chat via text or image with other contributors
@@ -66,4 +51,5 @@ synonyms, autocomplete, and spelling/typo handling in OpenSearch/Elasticsearch
 - As a platform, I rate-limit (per IP, per token) and throttle costly endpoints (search, upload).
 - backup
 - redis caching
-- RFC7807 Error response
+- [x] RFC7807 Error response
+- traceid and identity token

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import vn.conguyetduong.hogwarts.app.transfer.dto.ErrorResponse;
 import vn.conguyetduong.hogwarts.business.exception.ApiException;
 import vn.conguyetduong.hogwarts.business.exception.ErrorCode;
@@ -127,7 +129,7 @@ public class GlobalExceptionHandler {
 
     // Generic exception handler
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpServletRequest request) {
         ErrorCode errorCode = ErrorCode._400;
 
         String detail = "Request body is invalid or unreadable.";
@@ -144,6 +146,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
                 .body(body);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(HttpServletRequest request) {
+
+        ErrorCode errorCode = ErrorCode._404;
+        String detail = "Endpoint does not exist";
+
+        ErrorResponse body = new ErrorResponse(
+                errorCode.getTitle(),
+                detail,
+                null,
+                errorCode.getHttpStatus(),
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(body);
     }
 
     @ExceptionHandler(Exception.class)
