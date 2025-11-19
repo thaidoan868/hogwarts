@@ -1,32 +1,37 @@
 package vn.conguyetduong.hogwarts.app.health;
 
+import lombok.RequiredArgsConstructor;
+import org.keycloak.admin.client.resource.UsersResource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
+@RequiredArgsConstructor
 public class Keycloak implements HealthIndicator {
-    private final WebClient webClient = WebClient.builder().build();
 
-    @Value("${keycloak.server-url}")
-    String serverUrl;
+    private final org.keycloak.admin.client.Keycloak keycloak;
 
     @Value("${keycloak.realm}")
-    String realm;
+    private String realm;
 
     @Override
     public Health health() {
         try {
-            webClient.get()
-                    .uri(serverUrl + "/realms/" + realm + "/.well-known/openid-configuration")
-                    .retrieve()
-                    .toBodilessEntity()
-                    .block();
-            return Health.up().withDetail("endpoint", "openid-configuration").build();
+            UsersResource usersResource = keycloak.realm(realm).users();
+
+            int count = usersResource.count();
+
+            return Health.up()
+                    .withDetail("realm", realm)
+                    .withDetail("usersCount", count)
+                    .build();
+
         } catch (Exception e) {
-            return Health.down(e).build();
+            return Health.down(e)
+                    .withDetail("realm", realm)
+                    .build();
         }
     }
 }

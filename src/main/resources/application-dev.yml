@@ -38,6 +38,13 @@ spring:
   mvc:
     throw-exception-if-no-handler-found: true
 
+  # Maximum file upload size
+  servlet:
+    multipart:
+          max-file-size: 100MB
+          max-request-size: 500MB
+
+
 # Health Check
 management:
   endpoints:
@@ -57,3 +64,15 @@ keycloak:
   realm: hogwarts
   client-id: backend
   client-secret: APYtOv32HuVupfco6m0ltbf0RcXp1atx
+
+# minIO
+minio:
+  endpoint: http://localhost:9000
+  access-key: admin
+  secret-key: admin123
+  bucket: images
+  secure: false
+
+# static resource
+resources:
+  imageResourceUrl: http://localhost:9000 # the image url format is: {imageResourceUrl}/{bucket}/{objectname}

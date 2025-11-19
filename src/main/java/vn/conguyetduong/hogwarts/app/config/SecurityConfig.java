@@ -22,24 +22,8 @@ import java.util.stream.Stream;
 @EnableMethodSecurity
 @Profile("!test")
 public class SecurityConfig {
-
     @Bean
-    SecurityFilterChain security(HttpSecurity http,
-                                 Converter<Jwt, ? extends AbstractAuthenticationToken> jwtAuthConverter) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v*/admin/**").hasRole("ADMIN")
-                        .anyRequest().permitAll()
-                )
-                .oauth2ResourceServer(oauth -> oauth
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter))
-                );
-
-        return http.build();
-    }
-
-    @Bean
-    Converter<Jwt, ? extends AbstractAuthenticationToken> jwtAuthenticationConverter() {
+    public Converter<Jwt, ? extends AbstractAuthenticationToken> jwtAuthenticationConverter() {
         return jwt -> {
             Collection<GrantedAuthority> authorities = extractAuthorities(jwt);
             String principalName = jwt.getClaimAsString("preferred_username");
@@ -57,4 +41,19 @@ public class SecurityConfig {
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
+    @Bean
+    public SecurityFilterChain security(HttpSecurity http,
+                                 Converter<Jwt, ? extends AbstractAuthenticationToken> jwtAuthConverter) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v*/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v*/files/**").authenticated()
+                        .anyRequest().permitAll()
+                )
+                .oauth2ResourceServer(oauth -> oauth
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter))
+                );
+
+        return http.build();
+    }
 }

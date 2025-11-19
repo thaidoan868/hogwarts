@@ -9,8 +9,8 @@ import vn.conguyetduong.hogwarts.infra.model.User;
 import java.util.UUID;
 
 public class Utility {
-    private final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    private final Jwt jwt = (Jwt) auth.getPrincipal();
+    private static final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    private static  final Jwt jwt = (Jwt) auth.getPrincipal();
 
     public User getCurrentUser(){
         return User.builder()
@@ -22,7 +22,7 @@ public class Utility {
                 .build();
     }
 
-    public UUID getCurrentUserId(){
+    public static UUID getCurrentUserId(){
         return UUID.fromString(jwt.getSubject());
     }
 

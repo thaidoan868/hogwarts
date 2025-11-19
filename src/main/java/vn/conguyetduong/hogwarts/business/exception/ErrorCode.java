@@ -8,18 +8,16 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
     // generic errors
-    _400(HttpStatus.BAD_REQUEST, "Bad request"),
-    _401(HttpStatus.UNAUTHORIZED, "Unauthorized"),
-    _403(HttpStatus.FORBIDDEN, "Forbidden"),
-    _404(HttpStatus.NOT_FOUND, "Resource not found"),
-    _409(HttpStatus.CONFLICT, "Resource conflicted"),
-    _422(HttpStatus.UNPROCESSABLE_ENTITY, "Validation failed"),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "Bad request"),
+    NOT_FOUND(HttpStatus.NOT_FOUND, "Resource not found"),
+    CONFLICT(HttpStatus.CONFLICT, "Resource conflict"),
+    VALIDATION_FAILED(HttpStatus.UNPROCESSABLE_ENTITY, "Validation failed"),
 
-    _500(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),
+    INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error"),
+    METHOD_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "Method not allowed"),
+    EXCEED_MAXSIZE(HttpStatus.UNPROCESSABLE_ENTITY, "Exceed maximum size");
 
     // business specific errors
-    USER_404(HttpStatus.NOT_FOUND, "User not found"),
-    EMAIL_USERNAME_409(HttpStatus.UNPROCESSABLE_ENTITY, "Email or username already exists");
 
     private final HttpStatus httpStatus;
     private final String title;
