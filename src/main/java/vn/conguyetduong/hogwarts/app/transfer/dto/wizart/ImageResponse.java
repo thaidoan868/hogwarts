@@ -1,0 +1,13 @@
+package vn.conguyetduong.hogwarts.app.transfer.dto.wizart;
+
+import lombok.Data;
+import vn.conguyetduong.hogwarts.infra.model.Wizard;
+
+import java.util.UUID;
+
+@Data
+public class ImageResponse {
+    private String url;
+    private String altText;
+    private Integer sortOrder;
+}

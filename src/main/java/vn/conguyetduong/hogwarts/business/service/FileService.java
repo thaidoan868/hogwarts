@@ -13,7 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriUtils;
 import vn.conguyetduong.hogwarts.business.exception.ApiException;
 import vn.conguyetduong.hogwarts.business.exception.ErrorCode;
-import vn.conguyetduong.hogwarts.business.util.Utility;
+import vn.conguyetduong.hogwarts.business.util.UserUtil;
 import vn.conguyetduong.hogwarts.business.util.Validate;
 import vn.conguyetduong.hogwarts.infra.model.Image;
 import vn.conguyetduong.hogwarts.infra.repository.ImageRepository;
@@ -42,7 +42,6 @@ public class FileService {
 
     @Transactional
     public List<Image> saveImages(List<MultipartFile> files) {
-        UUID currentUserId = Utility.getCurrentUserId();
         List<Image> savedImages = new ArrayList<>();
 
         for (MultipartFile file : files) {
@@ -69,7 +68,6 @@ public class FileService {
                         .toUriString();
 
                 Image image = Image.builder()
-                        .uploaderId(currentUserId)
                         .bucket(bucket)
                         .objectName(objectName)
                         .url(url)

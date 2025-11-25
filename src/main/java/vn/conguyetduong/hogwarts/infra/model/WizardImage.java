@@ -1,12 +1,11 @@
 package vn.conguyetduong.hogwarts.infra.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
@@ -14,33 +13,43 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
+@Table(
+        name = "wizard_image",
+        indexes = {
+                @Index(name = "idx_wizard_image_wizard_id", columnList = "wizard_id")
+        }
+)
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @EntityListeners(AuditingEntityListener.class)
-public class Image {
+public class WizardImage {
 
     @Id
     @UuidGenerator
     private UUID id;
 
-    @CreatedBy
-    private UUID uploaderId;
-
-    @NotBlank
-    private String bucket;
-
-    @NotBlank
-    private String objectName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wizard_id")
+    @NotNull
+    @ToString.Exclude
+    private Wizard wizard;
 
     @NotBlank
     private String url;
 
-    private String contentType;
+    private String altText;
 
-    private Long sizeBytes;
+    @NotNull
+    @Min(0)
+    @Builder.Default
+    private Integer sortOrder = 0;
 
     @CreatedDate
     private Instant createdAt;
+
+    @CreatedBy
+    private UUID createdBy;
 }
+

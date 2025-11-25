@@ -1,6 +1,7 @@
 package vn.conguyetduong.hogwarts.business.service.external;
 
 
+import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.*;
@@ -40,6 +41,37 @@ public class KeycloakService {
         userRep.setEnabled(true);
         userRep.setEmailVerified(false);
         return userRep;
+    }
+
+    private User toDomainUser(UUID id, UserRepresentation rep) {
+        User user = User.builder()
+                .id(id)
+                .username(rep.getUsername())
+                .email(rep.getEmail())
+                .firstName(rep.getFirstName())
+                .lastName(rep.getLastName())
+                .build();
+        return user;
+    }
+
+    public User getUser(UUID id) {
+        UsersResource users = keycloak.realm(realm).users();
+        UserResource userResource = users.get(id.toString());
+
+        UserRepresentation rep;
+        try {
+            rep = userResource.toRepresentation();
+        } catch (NotFoundException e) {
+            throw new ApiException(
+                    ErrorCode.NOT_FOUND,
+                    "User with id '%s' not found".formatted(id)
+            );
+        } catch (Exception e) {
+            log.error("Keycloak failed to get user representation", e);
+            throw new ApiException(ErrorCode.INTERNAL_ERROR, null);
+        }
+
+        return toDomainUser(id, rep);
     }
 
     public User createUser(User registerUser) {

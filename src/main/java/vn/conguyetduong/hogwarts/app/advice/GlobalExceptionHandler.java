@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundEndpoint(HttpServletRequest request) {
-        ErrorCode errorCode = ErrorCode.NOT_FOUND;
+        ErrorCode errorCode = ErrorCode.BAD_REQUEST;
         String detail = "Endpoint does not exist";
         ErrorResponse body = new ErrorResponse(
                 errorCode.getTitle(),
