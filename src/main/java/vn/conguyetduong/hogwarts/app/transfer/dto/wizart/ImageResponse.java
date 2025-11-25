@@ -7,6 +7,7 @@ import java.util.UUID;
 
 @Data
 public class ImageResponse {
+    private UUID id;
     private String url;
     private String altText;
     private Integer sortOrder;

@@ -15,7 +15,7 @@ import java.util.UUID;
 )
 public interface WizardMapper {
 
-    Wizard toWizard(WizardRequest request);
+    Wizard toWizard(RegisterWizardRequest request);
 
     WizardImage toWizardImage(ImageRequest request);
 
