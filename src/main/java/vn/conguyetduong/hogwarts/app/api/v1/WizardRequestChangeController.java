@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import vn.conguyetduong.hogwarts.app.transfer.dto.wizardChangeRequest.WizardChangeReqRequest;
+import vn.conguyetduong.hogwarts.app.transfer.dto.wizardChangeRequest.RegisterWizardChangeRequestRequest;
 import vn.conguyetduong.hogwarts.app.transfer.dto.wizardChangeRequest.WizardChangeRequestResponse;
 import vn.conguyetduong.hogwarts.app.transfer.dto.wizardChangeRequest.WizardChangeRequestShortResponse;
 import vn.conguyetduong.hogwarts.app.transfer.mapper.WizardChangeRequestMapper;
@@ -27,11 +27,11 @@ import java.util.UUID;
 public class WizardRequestChangeController {
     private final WizardChangeRequestService service;
     private final WizardChangeRequestMapper mapper;
-    private final WizardRepository repo;
+    private final WizardRepository wizardRepo;
     private final KeycloakService keycloakService;
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody @Valid WizardChangeReqRequest request) {
+    public ResponseEntity<Object> create(@RequestBody @Valid RegisterWizardChangeRequestRequest request) {
         WizardChangeRequest wizardRequest = mapper.toWizardChangeRequest(request);
         WizardChangeRequest createdWizardRequest = service.create(wizardRequest);
         URI location = ServletUriComponentsBuilder
@@ -45,7 +45,7 @@ public class WizardRequestChangeController {
     @GetMapping
     public ResponseEntity<List<WizardChangeRequestShortResponse>> list() {
         List<WizardChangeRequest> requests = service.list();
-        List<WizardChangeRequestShortResponse> responses = mapper.toWizardChangeRequestShortResponses(requests, repo);
+        List<WizardChangeRequestShortResponse> responses = mapper.toWizardChangeRequestShortResponses(requests, wizardRepo);
         responses.forEach(response -> {
             String url = ServletUriComponentsBuilder
                     .fromCurrentContextPath()

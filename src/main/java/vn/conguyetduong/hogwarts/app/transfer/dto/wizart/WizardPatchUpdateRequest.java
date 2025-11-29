@@ -7,8 +7,7 @@ import vn.conguyetduong.hogwarts.infra.model.WizardImage;
 import java.util.List;
 
 @Data
-public class RegisterWizardRequest {
-    @NotBlank
+public class WizardPatchUpdateRequest {
     private String name;
     private String description;
     private List<ImageRequest> images;

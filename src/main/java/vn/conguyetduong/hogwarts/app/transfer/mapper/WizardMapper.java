@@ -9,15 +9,15 @@ import vn.conguyetduong.hogwarts.infra.model.WizardImage;
 import java.util.List;
 import java.util.UUID;
 
-@Mapper(
-        componentModel = "spring",
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
-)
+@Mapper(componentModel = "spring")
 public interface WizardMapper {
+    // --- creation
 
     Wizard toWizard(RegisterWizardRequest request);
 
     WizardImage toWizardImage(ImageRequest request);
+
+    List<WizardImage> toWizardImageList(List<ImageRequest> imageRequests);
 
     @AfterMapping
     default void setWizardInImage(@MappingTarget Wizard wizard) {
@@ -26,8 +26,16 @@ public interface WizardMapper {
         }
     }
 
-    // ----------
+    // --- update
+    @BeanMapping( nullValuePropertyMappingStrategy =  NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "images", ignore = true)
+    Wizard patchUpdateWizard(WizardPatchUpdateRequest request, @MappingTarget Wizard wizard);
 
+    @Mapping(target = "images", ignore = true)
+    Wizard putUpdate(RegisterWizardRequest request, @MappingTarget Wizard wizard);
+
+
+    // --- detail response
     @Mapping(target = "createdBy", source = "wizard.createdBy", qualifiedByName = "mapIdToUsername")
     @Mapping(target = "updatedBy", source = "wizard.updatedBy", qualifiedByName = "mapIdToUsername")
     WizardResponse toWizardResponse(Wizard wizard, @Context KeycloakService keycloakService);
@@ -39,7 +47,7 @@ public interface WizardMapper {
         return keycloakService.getUser(id).getUsername();
     }
 
-    // ------
+    // --- short response
     List<ShortWizardResponse> toShortWizardResponses(List<Wizard> wizards);
 
     ShortWizardResponse toShortWizardResponse(Wizard wizard);

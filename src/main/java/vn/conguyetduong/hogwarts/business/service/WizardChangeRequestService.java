@@ -3,7 +3,6 @@ package vn.conguyetduong.hogwarts.business.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vn.conguyetduong.hogwarts.app.transfer.dto.wizardChangeRequest.WizardChangeReqRequest;
 import vn.conguyetduong.hogwarts.business.exception.ApiException;
 import vn.conguyetduong.hogwarts.business.exception.ErrorCode;
 import vn.conguyetduong.hogwarts.business.util.UserUtil;
