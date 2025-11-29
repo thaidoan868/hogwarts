@@ -20,14 +20,14 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/wizards")
 @RequiredArgsConstructor
-public class WizardController {
+public class PublicWizardController {
     private final WizardService wizardService;
     private final WizardMapper wizardMapper;
     private final KeycloakService keycloakService;
 
     @GetMapping
     public ResponseEntity<List<ShortWizardResponse>> getWizards() {
-        List<Wizard> wizards = wizardService.getWizards();
+        List<Wizard> wizards = wizardService.getActiveWizards();
         List<ShortWizardResponse> responseWizards = wizardMapper.toShortWizardResponses(wizards);
         responseWizards.forEach(wizard -> {
             String url = ServletUriComponentsBuilder
@@ -48,5 +48,4 @@ public class WizardController {
 
         return ResponseEntity.ok(wizardResponse);
     }
-
 }

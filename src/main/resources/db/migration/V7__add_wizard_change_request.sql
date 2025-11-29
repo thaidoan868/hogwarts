@@ -18,4 +18,3 @@ CREATE TABLE wizard_change_request (
 
 CREATE INDEX idx_wcr_status ON wizard_change_request(status);
 CREATE INDEX idx_wcr_created_by on wizard_change_request(created_by);
-

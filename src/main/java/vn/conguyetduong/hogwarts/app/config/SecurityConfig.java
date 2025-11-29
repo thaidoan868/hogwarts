@@ -47,7 +47,10 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v*/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v*/files/**").authenticated()
+                        .requestMatchers(
+                                "/api/v*/files/**",
+                                "/api/v*/wizard-change-requests"
+                        ).authenticated()
                         .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(oauth -> oauth

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import vn.conguyetduong.hogwarts.app.transfer.dto.wizart.RegisterWizardRequest;
 import vn.conguyetduong.hogwarts.app.transfer.mapper.WizardMapper;
 import vn.conguyetduong.hogwarts.business.service.WizardService;
@@ -16,7 +17,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/admin/wizards")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
 public class AdminWizardController {
     private final WizardService wizardService;
     private final WizardMapper wizardMapper;
@@ -25,7 +25,11 @@ public class AdminWizardController {
     public ResponseEntity<?> createWizard(@RequestBody @Valid RegisterWizardRequest registerWizardRequest) {
         Wizard createWizard = wizardMapper.toWizard(registerWizardRequest);
         Wizard createdWizard = wizardService.create(createWizard);
-        URI location = URI.create("/api/v1/wizards/%s".formatted(createdWizard.getId()));
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/api/v1/wizards/{id}")
+                .buildAndExpand(createdWizard.getId())
+                .toUri();
 
         return ResponseEntity.created(location).build();
     }
