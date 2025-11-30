@@ -1,5 +1,6 @@
 package vn.conguyetduong.hogwarts.app.transfer.mapper;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.mapstruct.*;
@@ -8,6 +9,7 @@ import vn.conguyetduong.hogwarts.app.transfer.dto.wizardChangeRequest.WizardChan
 import vn.conguyetduong.hogwarts.app.transfer.dto.wizardChangeRequest.WizardChangeRequestShortResponse;
 import vn.conguyetduong.hogwarts.app.transfer.dto.wizardChangeRequest.WizardChangeRequestUpdateRequest;
 import vn.conguyetduong.hogwarts.app.transfer.dto.wizart.RegisterWizardRequest;
+import vn.conguyetduong.hogwarts.app.transfer.dto.wizart.WizardPatchUpdateRequest;
 import vn.conguyetduong.hogwarts.business.exception.ApiException;
 import vn.conguyetduong.hogwarts.business.exception.ErrorCode;
 import vn.conguyetduong.hogwarts.business.service.external.KeycloakService;
@@ -20,16 +22,18 @@ import java.util.UUID;
 
 @Mapper(componentModel = "spring")
 public interface WizardChangeRequestMapper {
+    // --- creation
     @Mapping(target = "payload", source = "payload", qualifiedByName = "mapPayload")
     WizardChangeRequest toWizardChangeRequest(RegisterWizardChangeRequestRequest request);
 
     @Named("mapPayload")
-    default JsonNode mapPayload(RegisterWizardRequest registerWizard) {
+    default JsonNode mapPayload(WizardPatchUpdateRequest updateWizardRequest) {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.valueToTree(registerWizard);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        return mapper.valueToTree(updateWizardRequest);
     }
 
-    // ----
+    // --- Listing
 
     List<WizardChangeRequestShortResponse> toWizardChangeRequestShortResponses(List<WizardChangeRequest> requests, @Context WizardRepository repo);
 
@@ -47,7 +51,7 @@ public interface WizardChangeRequestMapper {
         return wizard.getName();
     }
 
-    // ---
+    // --- updating
     @Mapping(target = "createdBy", source = "createdBy", qualifiedByName = "mapIdToUsername")
     @Mapping(target = "reviewedBy", source = "reviewedBy", qualifiedByName = "mapIdToUsername")
     WizardChangeRequestResponse toWizardChangeRequestResponse(WizardChangeRequest request, @Context KeycloakService  keycloakService);

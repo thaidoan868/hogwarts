@@ -1,12 +1,15 @@
 package vn.conguyetduong.hogwarts.app.transfer.dto.wizart;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import vn.conguyetduong.hogwarts.infra.model.WizardImage;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class WizardPatchUpdateRequest {
     private String name;
     private String description;

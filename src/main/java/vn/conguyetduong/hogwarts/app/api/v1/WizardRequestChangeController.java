@@ -18,6 +18,7 @@ import vn.conguyetduong.hogwarts.infra.model.WizardChangeRequest;
 import vn.conguyetduong.hogwarts.infra.repository.WizardRepository;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +33,37 @@ public class WizardRequestChangeController {
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody @Valid RegisterWizardChangeRequestRequest request) {
+        List<String> errors = new ArrayList<>();
+        switch (request.getAction()) {
+            case CREATE: {
+                if (request.getPayload() == null) {
+                    errors.add("Payload: is required");
+                }
+                break;
+            }
+            case UPDATE: {
+                if (request.getPayload() == null) {
+                    errors.add("Payload: is required");
+                }
+                if (request.getWizardId() == null) {
+                    errors.add("WizardId: is required");
+                }
+                break;
+            }
+            case DELETE: {
+                if (request.getWizardId() == null) {
+                    errors.add("WizardId: is required");
+                }
+                break;
+            }
+        }
+        if (!errors.isEmpty()) {
+            throw new ApiException(
+                    ErrorCode.VALIDATION_FAILED,
+                    "Validation failed with %d issue(s)".formatted(errors.size()),
+                    errors
+            );
+        }
         WizardChangeRequest wizardRequest = mapper.toWizardChangeRequest(request);
         WizardChangeRequest createdWizardRequest = service.create(wizardRequest);
         URI location = ServletUriComponentsBuilder

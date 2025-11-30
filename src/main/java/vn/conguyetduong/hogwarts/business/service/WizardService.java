@@ -30,6 +30,12 @@ public class WizardService {
     }
 
     public Wizard getWizard(UUID id) {
+        if (id == null) {
+            throw new ApiException(
+                    ErrorCode.BAD_REQUEST,
+                    "Wizard id can not be null."
+            );
+        }
         Wizard wizard = wizardRepo.findById(id).orElseThrow(() ->
                 new ApiException(
                         ErrorCode.NOT_FOUND,

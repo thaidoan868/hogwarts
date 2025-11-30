@@ -20,13 +20,13 @@ import java.util.UUID;
 @RequestMapping("/api/v1/admin/wizards")
 @RequiredArgsConstructor
 public class AdminWizardController {
-    private final WizardService service;
-    private final WizardMapper mapper;
+    private final WizardService wizardService;
+    private final WizardMapper wizardMapper;
 
     @PostMapping
-    public ResponseEntity<?> createWizard(@RequestBody @Valid RegisterWizardRequest registerWizardRequest) {
-        Wizard createWizard = mapper.toWizard(registerWizardRequest);
-        Wizard createdWizard = service.create(createWizard);
+    public ResponseEntity<?> create(@RequestBody @Valid RegisterWizardRequest registerWizardRequest) {
+        Wizard createWizard = wizardMapper.toWizard(registerWizardRequest);
+        Wizard createdWizard = wizardService.create(createWizard);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
                 .path("/api/v1/wizards/{id}")
@@ -38,10 +38,11 @@ public class AdminWizardController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> putUpdate(@RequestBody @Valid RegisterWizardRequest request, @PathVariable UUID id) {
-        Wizard wizard = service.getWizard(id);
-        Wizard updateWizard = mapper.putUpdate(request, wizard);
-        List<WizardImage> images = mapper.toWizardImageList(request.getImages());
+        Wizard wizard = wizardService.getWizard(id);
 
+        // mapping
+        Wizard updateWizard = wizardMapper.putUpdate(request, wizard);
+        List<WizardImage> images = wizardMapper.toWizardImageList(request.getImages());
         if (images != null) {
             images.forEach(image -> image.setWizard(wizard));
         }
@@ -55,38 +56,39 @@ public class AdminWizardController {
             wizard.setImages(images);
         }
 
-        Wizard updatedWizard = service.update(updateWizard);
-        return ResponseEntity.ok().build();
+        // updating
+        Wizard updatedWizard = wizardService.update(updateWizard);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> patchUpdate(@RequestBody @Valid WizardPatchUpdateRequest request, @PathVariable UUID id) {
-        Wizard wizard = service.getWizard(id);
-        Wizard updateWizard = mapper.patchUpdateWizard(request, wizard);
-        List<WizardImage> images = mapper.toWizardImageList(request.getImages());
+        Wizard wizard = wizardService.getWizard(id);
 
+        // mapping
+        Wizard updateWizard = wizardMapper.patchUpdateWizard(request, wizard);
+        List<WizardImage> images = wizardMapper.toWizardImageList(request.getImages());
         if (images != null) {
             images.forEach(image -> image.setWizard(wizard));
         }
 
         if (wizard.getImages() != null) {
-            if (images != null && images.isEmpty()) {
+            if (images != null ) {
                 wizard.getImages().clear();
-            }
-            if(images != null) {
                 wizard.getImages().addAll(images);
             }
         } else {
             wizard.setImages(images);
         }
 
-        Wizard updatedWizard = service.update(updateWizard);
-        return ResponseEntity.ok().build();
+        // updating
+        Wizard updatedWizard = wizardService.update(updateWizard);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteWizard(@PathVariable UUID id) {
-        service.delete(id);
+        wizardService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

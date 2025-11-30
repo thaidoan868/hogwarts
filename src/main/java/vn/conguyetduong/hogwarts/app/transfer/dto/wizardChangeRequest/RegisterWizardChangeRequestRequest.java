@@ -10,11 +10,9 @@ import java.util.UUID;
 
 @Data
 public class RegisterWizardChangeRequestRequest {
-    @NotNull
     private UUID wizardId;
     @NotNull
     private WizardChangeRequestAction action;
-    @NotNull
     private WizardPatchUpdateRequest payload;
     private String contributorComment;
 }

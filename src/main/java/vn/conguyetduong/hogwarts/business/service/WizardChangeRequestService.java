@@ -39,4 +39,7 @@ public class WizardChangeRequestService {
     public WizardChangeRequest get(UUID id) {
         return findRequestById(id);
     }
+
+    @Transactional
+    public WizardChangeRequest update(WizardChangeRequest updateRequest) { return repo.save(updateRequest); }
 }

@@ -30,7 +30,6 @@ public class WizardChangeRequest {
     @UuidGenerator
     private UUID id;
 
-    @NotNull
     private UUID wizardId;
 
     @NotNull
