@@ -1,0 +1,2 @@
+ALTER TABLE wizard
+    ALTER COLUMN status TYPE VARCHAR(20);

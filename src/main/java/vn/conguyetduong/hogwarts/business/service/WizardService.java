@@ -1,0 +1,60 @@
+package vn.conguyetduong.hogwarts.business.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import vn.conguyetduong.hogwarts.business.exception.ApiException;
+import vn.conguyetduong.hogwarts.business.exception.ErrorCode;
+import vn.conguyetduong.hogwarts.infra.constant.WizardStatus;
+import vn.conguyetduong.hogwarts.infra.model.Wizard;
+import vn.conguyetduong.hogwarts.infra.repository.WizardRepository;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class WizardService {
+    private final WizardRepository wizardRepo;
+
+    @Transactional
+    public Wizard create(Wizard wizard) {
+        Wizard createdWizard;
+        createdWizard = wizardRepo.save(wizard);
+        return  createdWizard;
+    }
+
+    public List<Wizard> getActiveWizards() {
+        return wizardRepo.findByStatus(WizardStatus.ACTIVE);
+    }
+
+    public Wizard getWizard(UUID id) {
+        if (id == null) {
+            throw new ApiException(
+                    ErrorCode.BAD_REQUEST,
+                    "Wizard id can not be null."
+            );
+        }
+        Wizard wizard = wizardRepo.findById(id).orElseThrow(() ->
+                new ApiException(
+                        ErrorCode.NOT_FOUND,
+                        "Wizard with id '%s' not found".formatted(id)
+                )
+        );
+        wizard.setViewCount(wizard.getViewCount() + 1);
+        return  wizard;
+    }
+
+    @Transactional
+    public Wizard update(Wizard newWizard) {
+        return wizardRepo.save(newWizard);
+    }
+
+    @Transactional
+    public void delete(UUID id) {
+        Wizard wizard = getWizard(id);
+        wizard.setStatus(WizardStatus.DELETED);
+        wizardRepo.save(wizard);
+    }
+}
