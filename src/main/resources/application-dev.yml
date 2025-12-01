@@ -26,6 +26,7 @@ spring:
     locations: classpath:db/migration
     default-schema: public
     baseline-on-migrate: false
+
   # Security Configuration
   security:
     oauth2:
