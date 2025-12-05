@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 public class WizardPatchUpdateRequest {
     private String name;
     private String description;

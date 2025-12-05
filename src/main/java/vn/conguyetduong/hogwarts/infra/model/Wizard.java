@@ -54,7 +54,7 @@ public class Wizard {
     @LastModifiedBy
     private UUID updatedBy;
 
-    @OneToMany(mappedBy = "wizard", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "wizard", cascade = CascadeType.ALL, orphanRemoval = true) // WizardImage.wizard
     private List<WizardImage> images;
 }
 

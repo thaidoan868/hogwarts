@@ -1,6 +1,9 @@
 package vn.conguyetduong.hogwarts.app.advice;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,7 +15,9 @@ import vn.conguyetduong.hogwarts.business.exception.ErrorCode;
 import java.util.List;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class ApiExceptionHandler {
+    private final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ErrorResponse> handleApiException(ApiException ex, HttpServletRequest request) {
@@ -23,6 +28,7 @@ public class ApiExceptionHandler {
                 ex.getHttpStatus(),
                 request.getRequestURI()
         );
+        log.error(ex.getDetail());
 
         return ResponseEntity
                 .status(ex.getHttpStatus())
@@ -53,6 +59,4 @@ public class ApiExceptionHandler {
                 .status(errorCode.getHttpStatus())
                 .body(body);
     }
-
-
 }

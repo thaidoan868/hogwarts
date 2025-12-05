@@ -1,7 +1,7 @@
 package vn.conguyetduong.hogwarts.infra.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import vn.conguyetduong.hogwarts.infra.model.Profile;
+import vn.conguyetduong.hogwarts.infra.model.profile.Profile;
 
 import java.util.Optional;
 import java.util.UUID;
