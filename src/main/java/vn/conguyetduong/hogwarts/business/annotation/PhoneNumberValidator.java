@@ -3,7 +3,7 @@ package vn.conguyetduong.hogwarts.business.annotation;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
+public class PhoneNumberValidator implements ConstraintValidator<PhoneNumberValidate, String> {
 
     private static final String PHONE_REGEX = "^(0[3|5|7|8|9])[0-9]{8}$";
 

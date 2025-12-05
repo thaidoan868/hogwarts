@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(validatedBy = PhoneNumberValidator.class)
-public @interface PhoneNumber {
+public @interface PhoneNumberValidate {
 
     String message() default "Invalid phone number format";
 

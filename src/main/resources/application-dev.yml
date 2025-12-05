@@ -2,6 +2,7 @@ spring:
   # Database Configuration
   jackson:
     time-zone: Asia/Ho_Chi_Minh
+    default-property-inclusion: non_null
   datasource:
     url: jdbc:postgresql://localhost:5432/hogwarts
     username: sa
