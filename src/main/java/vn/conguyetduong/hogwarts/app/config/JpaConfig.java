@@ -22,4 +22,3 @@ public class JpaConfig {
         return () -> Optional.of(UserUtil.getCurrentUserId());
     }
 }
-

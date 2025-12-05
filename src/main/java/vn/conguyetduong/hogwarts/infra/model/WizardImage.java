@@ -13,12 +13,6 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(
-        name = "wizard_image",
-        indexes = {
-                @Index(name = "idx_wizard_image_wizard_id", columnList = "wizard_id")
-        }
-)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -42,6 +42,9 @@ public interface WizardChangeRequestMapper {
 
     @Named("mapWizardIdToName")
     default String mapWizardIdToName(UUID id, @Context WizardRepository repo) {
+        if (id == null) {
+            return null;
+        }
         Wizard wizard = repo.findById(id).orElseThrow(() ->
                         new ApiException(
                                 ErrorCode.NOT_FOUND,
@@ -52,14 +55,14 @@ public interface WizardChangeRequestMapper {
     }
 
     // --- updating
-    @Mapping(target = "createdBy", source = "createdBy", qualifiedByName = "mapIdToUsername")
-    @Mapping(target = "reviewedBy", source = "reviewedBy", qualifiedByName = "mapIdToUsername")
-    WizardChangeRequestResponse toWizardChangeRequestResponse(WizardChangeRequest request, @Context KeycloakService  keycloakService);
-
-    @Named("mapIdToUsername")
-    default String mapIdToUsername(UUID id, @Context KeycloakService keycloakService) {
-        return keycloakService.getUser(id).getUsername();
-    }
+//    @Mapping(target = "createdBy", source = "createdBy", qualifiedByName = "mapIdToUsername")
+//    @Mapping(target = "reviewedBy", source = "reviewedBy", qualifiedByName = "mapIdToUsername")
+    WizardChangeRequestResponse toWizardChangeRequestResponse(WizardChangeRequest request);
+//
+//    @Named("mapIdToUsername")
+//    default String mapIdToUsername(UUID id, @Context KeycloakService keycloakService) {
+//        return keycloakService.getUser(id).getUsername();
+//    }
 
     // ---
     @BeanMapping(nullValuePropertyMappingStrategy =  NullValuePropertyMappingStrategy.IGNORE)

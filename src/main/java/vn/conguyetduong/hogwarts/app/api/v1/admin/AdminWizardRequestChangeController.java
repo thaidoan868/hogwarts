@@ -23,7 +23,6 @@ import vn.conguyetduong.hogwarts.business.exception.ErrorCode;
 import vn.conguyetduong.hogwarts.business.service.WizardChangeRequestService;
 import vn.conguyetduong.hogwarts.business.service.WizardService;
 import vn.conguyetduong.hogwarts.business.service.external.KeycloakService;
-import vn.conguyetduong.hogwarts.infra.constant.WizardChangeRequestAction;
 import vn.conguyetduong.hogwarts.infra.constant.WizardChangeRequestStatus;
 import vn.conguyetduong.hogwarts.infra.model.Wizard;
 import vn.conguyetduong.hogwarts.infra.model.WizardChangeRequest;
@@ -48,11 +47,12 @@ public class AdminWizardRequestChangeController {
     private final WizardService wizardService;
     private final WizardMapper  wizardMapper;
     private final ObjectMapper objectMapper = new  ObjectMapper();
-    private final Logger logger = LoggerFactory.getLogger(AdminWizardRequestChangeController.class);
+    private final Logger log = LoggerFactory.getLogger(AdminWizardRequestChangeController.class);
     private final Validator validator;
 
     @GetMapping
     public ResponseEntity<List<WizardChangeRequestShortResponse>> list() {
+        log.trace("GET /api/v1/admin/wizard-change-requests");
         List<WizardChangeRequest> requests = service.listAll();
         List<WizardChangeRequestShortResponse> responses = mapper.toWizardChangeRequestShortResponses(requests, wizardRepo);
         responses.forEach(response -> {
@@ -69,7 +69,7 @@ public class AdminWizardRequestChangeController {
     @GetMapping("/{id}")
     public ResponseEntity<WizardChangeRequestResponse> get(@PathVariable UUID id) {
         WizardChangeRequest request = service.get(id);
-        WizardChangeRequestResponse response = mapper.toWizardChangeRequestResponse(request, keycloakService);
+        WizardChangeRequestResponse response = mapper.toWizardChangeRequestResponse(request);
         return  ResponseEntity.ok(response);
     }
 
@@ -88,7 +88,7 @@ public class AdminWizardRequestChangeController {
                     try {
                         updateWizardRequest = objectMapper.treeToValue(payload, WizardPatchUpdateRequest.class);
                     } catch (IllegalArgumentException | JsonProcessingException e) {
-                        logger.error("An error occurred while processing the payload.", e);
+                        log.error("An error occurred while processing the payload.", e);
                         throw new ApiException(
                                 ErrorCode.BAD_REQUEST,
                                 "Can not convert wizard payload to wizard patch update request"
@@ -142,7 +142,7 @@ public class AdminWizardRequestChangeController {
                     try {
                         wizardRequest = objectMapper.treeToValue(payload, RegisterWizardRequest.class);
                     } catch (IllegalArgumentException | JsonProcessingException e) {
-                        logger.error("An error occurred while processing the payload.", e);
+                        log.error("An error occurred while processing the payload.", e);
                         throw new ApiException(
                                 ErrorCode.BAD_REQUEST,
                                 "Can not convert wizard payload to register wizard  request"

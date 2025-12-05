@@ -5,33 +5,33 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import vn.conguyetduong.hogwarts.app.transfer.dto.file.FileImageResponse;
+import vn.conguyetduong.hogwarts.app.transfer.dto.file.FileResponse;
+import vn.conguyetduong.hogwarts.app.transfer.mapper.FileMapper;
 import vn.conguyetduong.hogwarts.business.service.FileService;
-import vn.conguyetduong.hogwarts.infra.model.Image;
+import vn.conguyetduong.hogwarts.business.util.Validate;
+import vn.conguyetduong.hogwarts.infra.model.File;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/files")
 @RequiredArgsConstructor
-
 public class FileController {
-    private final FileService fileService;
+    private final FileService service;
+    private final FileMapper mapper;
 
     @PostMapping(path = "/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<List<FileImageResponse>> uploadImages(
-            @RequestPart("images") List<MultipartFile> files
-    ) {
-        List<Image> images = fileService.saveImages(files);
-        var response = images.stream()
-                .map(image -> new FileImageResponse(
-                        image.getId(),
-                        image.getUrl(),
-                        image.getContentType(),
-                        image.getSizeBytes()
-                ))
-                .toList();
+    public ResponseEntity<List<FileResponse>> uploadImages(@RequestParam List<MultipartFile> files) {
+        List<File> images = new ArrayList();
 
+        for (MultipartFile file : files) {
+            Validate.image(file);
+            images.add(service.saveFile(file));
+        }
+
+        // convert and return
+        List<FileResponse> response = mapper.toFileResponseList(images);
         return ResponseEntity.ok(response);
     }
 }

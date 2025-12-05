@@ -2,6 +2,7 @@ spring:
   # Database Configuration
   jackson:
     time-zone: Asia/Ho_Chi_Minh
+    default-property-inclusion: non_null
   datasource:
     url: jdbc:postgresql://localhost:5432/hogwarts
     username: sa
@@ -77,4 +78,12 @@ minio:
 
 # static resource
 resources:
-  imageResourceUrl: http://localhost:9000 # the image url format is: {imageResourceUrl}/{bucket}/{objectname}
+  baseResourceUrl: http://localhost:9000 # the file url format is: {baseResourceUrl}/{bucket}/{objectname}
+
+# Logging
+logging:
+  level:
+    root: ERROR
+    vn.conguyetduong.hogwarts: TRACE
+    org.springframework.web: INFO
+    org.hibernate.SQL: ERROR

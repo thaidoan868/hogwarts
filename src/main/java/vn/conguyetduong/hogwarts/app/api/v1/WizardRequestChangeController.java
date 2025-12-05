@@ -95,7 +95,7 @@ public class WizardRequestChangeController {
         if (!request.getCreatedBy().equals(UserUtil.getCurrentUserId())) {
             throw new ApiException(ErrorCode.FORBIDDEN, "You don't have permission to access this resource");
         }
-        WizardChangeRequestResponse response = mapper.toWizardChangeRequestResponse(request, keycloakService);
+        WizardChangeRequestResponse response = mapper.toWizardChangeRequestResponse(request);
         return  ResponseEntity.ok(response);
     }
 }
