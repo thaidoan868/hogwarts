@@ -36,4 +36,4 @@ minio:
 
 # static resource
 resources:
-  imageResourceUrl: http://localhost:9000 # the image url format is: {imageResourceUrl}/{bucket}/{objectname}
+  baseResourceUrl: http://localhost:9000 # the image url format is: {imageResourceUrl}/{bucket}/{objectname}
