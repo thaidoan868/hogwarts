@@ -1,4 +1,4 @@
-package vn.conguyetduong.hogwarts.business.service;
+package vn.conguyetduong.hogwarts.business.service.external;
 
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
@@ -18,9 +18,6 @@ import vn.conguyetduong.hogwarts.infra.repository.FileRepository;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import static java.nio.charset.StandardCharsets.UTF_8;

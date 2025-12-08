@@ -44,7 +44,7 @@ public interface WizardMapper {
 
     @Named("mapIdToUsername")
     default String mapCreatedBy(UUID id, @Context KeycloakService keycloakService) {
-        return keycloakService.getUser(id).getUsername();
+        return keycloakService.getUser(id.toString()).getUsername();
     }
 
     // --- short response

@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.conguyetduong.hogwarts.app.transfer.dto.file.FileResponse;
 import vn.conguyetduong.hogwarts.app.transfer.mapper.FileMapper;
-import vn.conguyetduong.hogwarts.business.service.FileService;
-import vn.conguyetduong.hogwarts.business.util.Validate;
+import vn.conguyetduong.hogwarts.business.service.external.FileService;
+import vn.conguyetduong.hogwarts.business.util.ValidateUtil;
 import vn.conguyetduong.hogwarts.infra.model.File;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class FileController {
         List<File> images = new ArrayList();
 
         for (MultipartFile file : files) {
-            Validate.image(file);
+            ValidateUtil.image(file);
             images.add(service.saveFile(file));
         }
 

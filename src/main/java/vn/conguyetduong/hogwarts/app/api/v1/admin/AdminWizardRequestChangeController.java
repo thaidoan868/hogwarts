@@ -23,6 +23,7 @@ import vn.conguyetduong.hogwarts.business.exception.ErrorCode;
 import vn.conguyetduong.hogwarts.business.service.WizardChangeRequestService;
 import vn.conguyetduong.hogwarts.business.service.WizardService;
 import vn.conguyetduong.hogwarts.business.service.external.KeycloakService;
+import vn.conguyetduong.hogwarts.business.util.ValidateUtil;
 import vn.conguyetduong.hogwarts.infra.constant.WizardChangeRequestStatus;
 import vn.conguyetduong.hogwarts.infra.model.Wizard;
 import vn.conguyetduong.hogwarts.infra.model.WizardChangeRequest;
@@ -30,9 +31,7 @@ import vn.conguyetduong.hogwarts.infra.model.WizardImage;
 import vn.conguyetduong.hogwarts.infra.repository.WizardChangeRequestRepository;
 import vn.conguyetduong.hogwarts.infra.repository.WizardRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -96,18 +95,7 @@ public class AdminWizardRequestChangeController {
                     }
 
                     // validation
-                    Set<ConstraintViolation<WizardPatchUpdateRequest>> violations = validator.validate(updateWizardRequest);
-                    if (!violations.isEmpty()) {
-                        List<String> errors = new ArrayList<>();
-                        for (ConstraintViolation<WizardPatchUpdateRequest> violation : violations) {
-                            errors.add(violation.getPropertyPath() + ": " + violation.getMessage());
-                        }
-                        throw new ApiException(
-                                ErrorCode.VALIDATION_FAILED,
-                                "Couldn't update the wizard because the change request violated %d constraint(s)".formatted(violations.size()),
-                                errors
-                        );
-                    }
+                    ValidateUtil.annotations(validator, updateWizardRequest);
 
                     // mapping
                     Wizard updateWizard = wizardMapper.patchUpdateWizard(updateWizardRequest, wizard);
@@ -150,18 +138,7 @@ public class AdminWizardRequestChangeController {
                     }
 
                     // validation
-                    Set<ConstraintViolation<RegisterWizardRequest>> violations = validator.validate(wizardRequest);
-                    if (!violations.isEmpty()) {
-                        List<String> errors = new ArrayList<>();
-                        for (ConstraintViolation<RegisterWizardRequest> violation : violations) {
-                            errors.add(violation.getPropertyPath() + ": " + violation.getMessage());
-                        }
-                        throw new ApiException(
-                                ErrorCode.VALIDATION_FAILED,
-                                "Couldn't create the wizard because the register request violated %d constraint(s)".formatted(violations.size()),
-                                errors
-                        );
-                    }
+                    ValidateUtil.annotations(validator, wizardRequest);
 
                     // creation
                     Wizard createWizard = wizardMapper.toWizard(wizardRequest);

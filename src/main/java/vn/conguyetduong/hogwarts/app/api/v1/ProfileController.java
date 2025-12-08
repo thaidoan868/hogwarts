@@ -67,7 +67,7 @@ public class ProfileController {
             ShortProfileResponse response = ShortProfileResponse.builder()
                     .userID(currentUser.getId())
                     .username(currentUser.getUsername())
-                    .fullName(currentUser.fullName())
+                    .fullName(currentUser.getFullName())
                     .avatar(avatarResponse)
                     .build();
             return ResponseEntity.ok(response);

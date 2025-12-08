@@ -1,9 +1,9 @@
 package vn.conguyetduong.hogwarts.infra.model;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -13,14 +13,20 @@ import java.util.UUID;
 @AllArgsConstructor
 public class User {
     private UUID id;
+    @NotBlank
     private String username;
+    @NotBlank
     private String email;
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
+    @NotBlank
     private String password;
-    private boolean isEmailVerified;
+    @Builder.Default
+    private boolean isEmailVerified = false;
 
-    public String fullName() {
+    public String getFullName() {
         return (firstName + " " + lastName).trim();
     }
 
