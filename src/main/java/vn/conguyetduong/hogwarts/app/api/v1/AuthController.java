@@ -10,6 +10,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import vn.conguyetduong.hogwarts.app.transfer.dto.user.ConfirmResetRequest;
+import vn.conguyetduong.hogwarts.app.transfer.dto.user.PasswordResetRequest;
 import vn.conguyetduong.hogwarts.app.transfer.dto.user.RegisterUserRequest;
 import vn.conguyetduong.hogwarts.app.transfer.dto.user.RegisterUserResponse;
 import vn.conguyetduong.hogwarts.app.transfer.mapper.UserMapper;
@@ -23,7 +25,6 @@ import java.util.Map;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
-
     private final UserService service;
     private final UserMapper mapper;
 
@@ -38,5 +39,17 @@ public class AuthController {
                 .toUri();
 
         return ResponseEntity.created(location).build();
+    }
+
+    @PostMapping("/password/reset/request")
+    public ResponseEntity<?> requestResetCode(@Valid @RequestBody PasswordResetRequest request) {
+        service.requestResetCode(request.getUsername(), request.getEmail());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/password/reset/confirm")
+    public ResponseEntity<?> confirmReset(@Valid @RequestBody ConfirmResetRequest request) {
+        service.confirmResetPassword(request.getEmail(), request.getCode(), request.getNewPassword());
+        return ResponseEntity.noContent().build();
     }
 }

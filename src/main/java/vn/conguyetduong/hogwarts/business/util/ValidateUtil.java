@@ -1,5 +1,7 @@
 package vn.conguyetduong.hogwarts.business.util;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import org.springframework.web.multipart.MultipartFile;
 import vn.conguyetduong.hogwarts.business.exception.ApiException;
 import vn.conguyetduong.hogwarts.business.exception.ErrorCode;
@@ -7,9 +9,11 @@ import vn.conguyetduong.hogwarts.business.exception.ErrorCode;
 import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
-public class Validate {
+public class ValidateUtil {
 
     public static void image(MultipartFile file) {
         Set<String> ALLOWED_IMAGE_TYPES = Set.of(
@@ -57,6 +61,21 @@ public class Validate {
             throw new ApiException(
                     ErrorCode.VALIDATION_FAILED,
                     "Can not get image bytes: " + file.getOriginalFilename()
+            );
+        }
+    }
+
+    public static void annotations(Validator validator, Object entity) {
+        Set<ConstraintViolation<Object>> violations = validator.validate(entity);
+        if (!violations.isEmpty()) {
+            List<String> errors = new ArrayList<>();
+            for (ConstraintViolation<Object> violation : violations) {
+                errors.add(violation.getPropertyPath() + ": " + violation.getMessage());
+            }
+            throw new ApiException(
+                    ErrorCode.VALIDATION_FAILED,
+                    "Validation for class '%s' failed with %d issue(s)".formatted(entity.getClass().getName(), violations.size()),
+                    errors
             );
         }
     }
