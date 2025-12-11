@@ -1,5 +1,8 @@
 package vn.conguyetduong.hogwarts.app.api.v1;
 
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
@@ -24,6 +27,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication endpoints", description = "Handles user requests for password resets, including validating and processing reset requests.")
 public class AuthController {
     private final UserService service;
     private final UserMapper mapper;
@@ -40,12 +44,14 @@ public class AuthController {
 
         return ResponseEntity.created(location).build();
     }
-
+    @WithSpan
     @PostMapping("/password/reset/request")
+    @Operation(summary = "Request to reset password", description = "Check the email and send the code back to the server")
     public ResponseEntity<?> requestResetCode(@Valid @RequestBody PasswordResetRequest request) {
+        // @Parameter(description = "The email address associated with the username") @RequestParam String email
         service.requestResetCode(request.getUsername(), request.getEmail());
         return ResponseEntity.noContent().build();
-    }
+   }
 
     @PostMapping("/password/reset/confirm")
     public ResponseEntity<?> confirmReset(@Valid @RequestBody ConfirmResetRequest request) {

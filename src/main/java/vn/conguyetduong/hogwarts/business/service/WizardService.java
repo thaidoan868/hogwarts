@@ -1,5 +1,7 @@
 package vn.conguyetduong.hogwarts.business.service;
 
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.Tracer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class WizardService {
     private final WizardRepository wizardRepo;
+    private final Tracer tracer;
 
     @Transactional
     public Wizard create(Wizard wizard) {
@@ -26,16 +29,14 @@ public class WizardService {
     }
 
     public List<Wizard> getActiveWizards() {
-        return wizardRepo.findByStatus(WizardStatus.ACTIVE);
+        Span span = tracer.spanBuilder(this.getClass().getSimpleName() + ".getActiveWizards").startSpan();
+        List<Wizard> wizards = wizardRepo.findByStatus(WizardStatus.ACTIVE);
+        span.setAttribute("status", "success");
+        span.end();
+        return  wizards;
     }
 
     public Wizard getWizard(UUID id) {
-        if (id == null) {
-            throw new ApiException(
-                    ErrorCode.BAD_REQUEST,
-                    "Wizard id can not be null."
-            );
-        }
         Wizard wizard = wizardRepo.findById(id).orElseThrow(() ->
                 new ApiException(
                         ErrorCode.NOT_FOUND,

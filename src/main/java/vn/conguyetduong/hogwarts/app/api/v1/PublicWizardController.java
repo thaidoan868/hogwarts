@@ -1,5 +1,6 @@
 package vn.conguyetduong.hogwarts.app.api.v1;
 
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ public class PublicWizardController {
     private final KeycloakService keycloakService;
 
     @GetMapping
+    @WithSpan
     public ResponseEntity<List<ShortWizardResponse>> getWizards() {
         List<Wizard> wizards = wizardService.getActiveWizards();
         List<ShortWizardResponse> responseWizards = wizardMapper.toShortWizardResponses(wizards);

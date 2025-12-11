@@ -93,7 +93,33 @@ resources:
 # Logging
 logging:
   level:
-    root: ERROR
+    root: INFO
     vn.conguyetduong.hogwarts: TRACE
     org.springframework.web: INFO
-    org.hibernate.SQL: ERROR
+    io.opentelemetry: INFO
+
+# Tracing
+otel:
+  exporter:
+    otlp:
+      # Jaeger
+      endpoint: http://localhost:4317
+      protocol: grpc
+  metrics:
+    exporter: none
+
+  #disable logs only export traces and metrics
+  logs:
+    exporter: none
+  resource:
+    attributes:
+      service.name: HogwartsForum
+  traces:
+    sampler: always_on
+    exporter: otlp
+
+# Documentation
+springdoc:
+  api-docs:
+    enabled=true:
+
