@@ -1,5 +1,9 @@
 package vn.conguyetduong.hogwarts.business.service;
 
+import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailSender;
@@ -34,6 +38,7 @@ public class UserService {
     private final TokenRepository tokenRepo;
     private final MailService mailService;
     private final TokenService tokenService;
+    private final Tracer tracer;
 
 
     @Transactional
@@ -56,11 +61,17 @@ public class UserService {
 
     @Transactional
     public void requestResetCode(String username, String emailAddress) {
+        Span span = tracer.spanBuilder(this.getClass().getSimpleName() + ".requestResetCode").startSpan();
+        span.setAttribute("username", username);
+        span.setAttribute("email", emailAddress);
+
         // check if the email exists
         User user = keycloakService.getUser(username, emailAddress);
 
         // if the email has an unexpired token
         if (tokenService.hasUnexpiredToken(emailAddress)) {
+            span.setAttribute("status", "failed");
+            span.end();
             throw new ApiException(
                     ErrorCode.CONFLICT,
                     "Has an unexpired code. Please wait until the code expires"
@@ -79,6 +90,9 @@ public class UserService {
         // send the reset code to the user's email
         String emailBody = EmailTemplates.resetPassword(user.getFullName(), token.getCode());
         mailService.sendMail(token.getEmail(), EmailTemplates.RESET_PASSWORD_SUBJECT, emailBody);
+
+        span.setAttribute("status", "success");
+        span.end();
     }
 
     public void confirmResetPassword(String email, String code, String newPassword) {
