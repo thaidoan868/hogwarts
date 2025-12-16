@@ -3,6 +3,9 @@ package vn.conguyetduong.hogwarts.business.service;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Tracer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.conguyetduong.hogwarts.business.exception.ApiException;
@@ -28,14 +31,6 @@ public class WizardService {
         return  createdWizard;
     }
 
-    public List<Wizard> getActiveWizards() {
-        Span span = tracer.spanBuilder(this.getClass().getSimpleName() + ".getActiveWizards").startSpan();
-        List<Wizard> wizards = wizardRepo.findByStatus(WizardStatus.ACTIVE);
-        span.setAttribute("status", "success");
-        span.end();
-        return  wizards;
-    }
-
     public Wizard getWizard(UUID id) {
         Wizard wizard = wizardRepo.findById(id).orElseThrow(() ->
                 new ApiException(
@@ -45,6 +40,15 @@ public class WizardService {
         );
         wizard.setViewCount(wizard.getViewCount() + 1);
         return  wizard;
+    }
+
+    public Page<Wizard> findAllStatusActive(Pageable  pageable) {
+        Span span = tracer.spanBuilder(this.getClass().getSimpleName() + ".findAll(Pageable)").startSpan();
+
+        Page<Wizard> wizardPage = wizardRepo.findByStatus(WizardStatus.ACTIVE, pageable);
+
+        span.end();
+        return wizardPage;
     }
 
     @Transactional
