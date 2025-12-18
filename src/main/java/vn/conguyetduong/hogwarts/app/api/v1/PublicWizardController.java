@@ -2,16 +2,15 @@ package vn.conguyetduong.hogwarts.app.api.v1;
 
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import vn.conguyetduong.hogwarts.app.transfer.dto.page.PageDto;
 import vn.conguyetduong.hogwarts.app.transfer.dto.wizart.ShortWizardResponse;
@@ -21,6 +20,8 @@ import vn.conguyetduong.hogwarts.app.transfer.mapper.WizardMapper;
 import vn.conguyetduong.hogwarts.business.service.WizardService;
 import vn.conguyetduong.hogwarts.business.service.external.KeycloakService;
 import vn.conguyetduong.hogwarts.infra.model.Wizard;
+import vn.conguyetduong.hogwarts.infra.specification.WizardSearchCriteria;
+import vn.conguyetduong.hogwarts.infra.specification.WizardSearchSpecs;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,15 +35,18 @@ public class PublicWizardController {
     private final KeycloakService keycloakService;
     private final PageMapper pageMapper;
 
-    @GetMapping
+    @PostMapping
     @WithSpan
     public ResponseEntity<PageDto<ShortWizardResponse>> findAll(
-            @PageableDefault(size = 20, page = 0, sort = "name,asc")
-            @ParameterObject
-            Pageable pageable
-        ) {
+            @PageableDefault(size = 20, page = 0, sort = "name")
+            @ParameterObject Pageable pageable,
+            @Valid @RequestBody WizardSearchCriteria criteria
+            ) {
+        // convert criteria to a specification
+        Specification<Wizard> spec = WizardSearchSpecs.of(criteria);
+
         // get all active wizards
-        Page<Wizard> wizardPage = service.findAllStatusActive(pageable);
+        Page<Wizard> wizardPage = service.findAll(spec, pageable);
 
         // mapping
         Page<ShortWizardResponse> wizardDtoPage = wizardPage.map(mapper::toShortWizardResponse);

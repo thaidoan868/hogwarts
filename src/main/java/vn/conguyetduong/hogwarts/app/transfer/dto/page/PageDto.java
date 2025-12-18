@@ -17,7 +17,7 @@ public class PageDto<T> {
     private int totalPages;
 
     @Schema( defaultValue = "3", description = "The current page")
-    private int number;
+    private int currentPage;
 
     @Schema( defaultValue = "20", description = "Number of elements per page")
     private int size;
