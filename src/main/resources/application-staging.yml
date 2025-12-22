@@ -1,5 +1,122 @@
+spring:
+  # Database Configuration
+  jackson:
+    time-zone: Asia/Ho_Chi_Minh
+    default-property-inclusion: non_null
+  datasource:
+    url: jdbc:postgresql://hogwarts-postgres.cbeewesc830k.ap-southeast-1.rds.amazonaws.com:5432/hogwarts
+    username: postgresadmin
+    password: postgrespassword
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: false
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.jdbc.time_zone: UTC
+      hibernate.format_sql: true
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+      javax:
+        persistence:
+          validation:
+            mode: auto
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    default-schema: public
+    baseline-on-migrate: false
+
+  # Security Configuration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://auth.hogwarts.oldmoon.io.vn/realms/hogwarts
+  # Error Configuration
+  error:
+    whitelabel:
+      enabled: false
+  mvc:
+    throw-exception-if-no-handler-found: true
+
+  # Maximum file upload size
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 500MB
+  # Email configuration
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "your-email@gmail.com"
+    from-display-name: "Hogwarts Forum"
+    password: "app-password"
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+
+# Health Check
 management:
+  server:
+    port: 8082
   endpoints:
     web:
       exposure:
-        include: health
+        include: health, info
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application:
+
+# Security Configuration
+keycloak:
+  server-url: http://internal-aws-internal-lb-970886254.ap-southeast-1.elb.amazonaws.com
+  realm: hogwarts
+  client-id: backend
+  client-secret: hnqcclPCqxBt1WBWtJL3uNQP76xTbgDT
+
+# Object Storage
+aws.s3:
+  region: ap-southeast-1
+  access-key: "AKIAWZMTO7AE2JBOAN64"
+  secret-key: "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"
+
+
+# static resource
+resources:
+  # where to save static resources
+  bucket: hogwarts-files
+  baseResourceUrl: https://hogwarts-files.s3.ap-southeast-1.amazonaws.com # the file url format is: {baseResourceUrl}/{bucket}/{objectname}
+
+# openAI
+openai:
+  model: "gpt-mini-4"
+  api-key: ""
+  base-url: https://api.openai.com/v1
+
+# Logging
+logging:
+  level:
+    root: INFO
+    vn.conguyetduong.hogwarts: TRACE
+    org.springframework.web: INFO
+    io.opentelemetry: INFO
+
+# Tracing
+otel:
+  traces:
+    exporter: none
+  metrics:
+    exporter: none
+  logs:
+    exporter: none
+
+# Documentation
+springdoc:
+  api-docs:
+    enabled: false

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class Keycloak implements HealthIndicator {
+public class KeycloakHealth implements HealthIndicator {
 
     private final org.keycloak.admin.client.Keycloak keycloak;
 

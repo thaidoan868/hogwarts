@@ -47,4 +47,10 @@ minio:
 
 # static resource
 resources:
+  bucket: hogwarts-files
   baseResourceUrl: http://localhost:9000 # the image url format is: {imageResourceUrl}/{bucket}/{objectname}
+
+openai:
+  model: "gpt-mini-4"
+  api-key: ""
+  base-url: https://api.openai.com/v1

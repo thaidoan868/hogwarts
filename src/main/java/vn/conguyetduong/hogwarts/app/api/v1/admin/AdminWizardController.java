@@ -29,7 +29,7 @@ public class AdminWizardController {
         Wizard createdWizard = wizardService.create(createWizard);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
-                .path("/api/v1/wizards/{id}")
+                .path("/api/ v1/wizards/{id}")
                 .buildAndExpand(createdWizard.getId())
                 .toUri();
 
