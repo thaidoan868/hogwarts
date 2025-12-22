@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import vn.conguyetduong.hogwarts.business.exception.ApiException;
 import vn.conguyetduong.hogwarts.business.exception.ErrorCode;
-import vn.conguyetduong.hogwarts.business.service.external.storage.FileService;
+import vn.conguyetduong.hogwarts.business.service.external.FileService;
 import vn.conguyetduong.hogwarts.business.util.UserUtil;
 import vn.conguyetduong.hogwarts.business.util.ValidateUtil;
 import vn.conguyetduong.hogwarts.infra.model.profile.Avatar;

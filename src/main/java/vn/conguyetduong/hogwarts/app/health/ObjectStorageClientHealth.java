@@ -6,7 +6,7 @@ import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import vn.conguyetduong.hogwarts.business.service.external.storage.ObjectStorageClient;
+import vn.conguyetduong.hogwarts.infra.client.objectstorage.ObjectStorageClient;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

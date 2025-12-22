@@ -1,6 +1,5 @@
-package vn.conguyetduong.hogwarts.business.service.external.storage;
+package vn.conguyetduong.hogwarts.business.service.external;
 
-import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriUtils;
 import vn.conguyetduong.hogwarts.business.exception.ApiException;
 import vn.conguyetduong.hogwarts.business.exception.ErrorCode;
+import vn.conguyetduong.hogwarts.infra.client.objectstorage.ObjectStorageClient;
 import vn.conguyetduong.hogwarts.infra.model.File;
 import vn.conguyetduong.hogwarts.infra.repository.FileRepository;
 

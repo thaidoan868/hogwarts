@@ -1,4 +1,4 @@
-package vn.conguyetduong.hogwarts.business.service.external.storage;
+package vn.conguyetduong.hogwarts.infra.client.objectstorage;
 
 import java.io.InputStream;
 

@@ -1,4 +1,4 @@
-package vn.conguyetduong.hogwarts.business.service.external.storage;
+package vn.conguyetduong.hogwarts.infra.client.objectstorage;
 
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.io.InputStream;
 
 @Component
-@Profile("dev")
+@Profile({"dev", "test"})
 @RequiredArgsConstructor
 public class MinIoObjectStorageClient implements ObjectStorageClient {
 
