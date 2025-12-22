@@ -78,16 +78,22 @@ keycloak:
   client-id: backend
   client-secret: APYtOv32HuVupfco6m0ltbf0RcXp1atx
 
-# minIO
+# Object Storage
 minio:
   endpoint: http://localhost:9000
   access-key: admin
   secret-key: admin123
-  bucket: images
   secure: false
+aws.s3:
+  region: ap-southeast-1
+  access-key: ""
+  secret-key: ""
+
 
 # static resource
 resources:
+  # where to save static resources
+  bucket: images
   baseResourceUrl: http://localhost:9000 # the file url format is: {baseResourceUrl}/{bucket}/{objectname}
 
 # Logging
@@ -122,4 +128,9 @@ otel:
 springdoc:
   api-docs:
     enabled=true:
+
+openai:
+  model: "gpt-mini-4"
+  api-key: ""
+  base-url: https://api.openai.com/v1
 

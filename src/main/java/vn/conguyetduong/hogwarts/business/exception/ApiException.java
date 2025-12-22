@@ -22,6 +22,7 @@ public class ApiException extends RuntimeException {
     }
 
     public ApiException(ErrorCode errorCode, String detail) {
+        super(detail);
         this.errorCode = errorCode;
         this.detail = detail;
         this.errors = null;

@@ -12,6 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import reactor.core.publisher.Mono;
 import vn.conguyetduong.hogwarts.app.transfer.dto.page.PageDto;
 import vn.conguyetduong.hogwarts.app.transfer.dto.wizart.ShortWizardResponse;
 import vn.conguyetduong.hogwarts.app.transfer.dto.wizart.WizardResponse;
@@ -19,6 +20,7 @@ import vn.conguyetduong.hogwarts.app.transfer.mapper.PageMapper;
 import vn.conguyetduong.hogwarts.app.transfer.mapper.WizardMapper;
 import vn.conguyetduong.hogwarts.business.service.WizardService;
 import vn.conguyetduong.hogwarts.business.service.external.KeycloakService;
+import vn.conguyetduong.hogwarts.business.service.external.OpenAiService;
 import vn.conguyetduong.hogwarts.infra.model.Wizard;
 import vn.conguyetduong.hogwarts.infra.specification.WizardSearchCriteria;
 import vn.conguyetduong.hogwarts.infra.specification.WizardSearchSpecs;
@@ -34,6 +36,7 @@ public class PublicWizardController {
     private final WizardMapper mapper;
     private final KeycloakService keycloakService;
     private final PageMapper pageMapper;
+    private final OpenAiService openAiService;
 
     @PostMapping
     @WithSpan
@@ -70,5 +73,10 @@ public class PublicWizardController {
         WizardResponse wizardResponse = mapper.toWizardResponse(wizard, keycloakService);
 
         return ResponseEntity.ok(wizardResponse);
+    }
+
+    @GetMapping("/fun-fact")
+    public Mono<String> funFact() {
+        return openAiService.ask("Give me a fun fact about the Harry potter series");
     }
 }
