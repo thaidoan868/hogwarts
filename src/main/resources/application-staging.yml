@@ -27,6 +27,7 @@ spring:
     locations: classpath:db/migration
     default-schema: public
     baseline-on-migrate: false
+    validate-on-migrate: true
 
   # Security Configuration
   security:

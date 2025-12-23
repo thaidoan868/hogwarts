@@ -60,6 +60,7 @@ spring:
 
 # Health Check
 management:
+  server.port: 8082
   endpoints:
     web:
       exposure:
@@ -79,10 +80,15 @@ management:
 
 # Security Configuration
 keycloak:
-  server-url: http://localhost:8080
+#  server-url: http://localhost:8080
+  server-url: https://auth.hogwarts.oldmoon.io.vn:80
+
   realm: hogwarts
   client-id: backend
-  client-secret: APYtOv32HuVupfco6m0ltbf0RcXp1atx
+#  client-secret: APYtOv32HuVupfco6m0ltbf0RcXp1atx
+  client-secret: 2hLp4zmNBxa5Cu3mIeH5zexhplmGSOjS
+
+
 
 # Object Storage
 minio:

@@ -1,6 +1,8 @@
 package vn.conguyetduong.hogwarts.app.health;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
@@ -9,9 +11,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class KeycloakHealth implements HealthIndicator {
 
-    private final org.keycloak.admin.client.Keycloak keycloak;
+    private final Keycloak keycloak;
 
     @Value("${keycloak.realm}")
     private String realm;
@@ -29,6 +32,7 @@ public class KeycloakHealth implements HealthIndicator {
                     .build();
 
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             return Health.down(e)
                     .withDetail("realm", realm)
                     .build();

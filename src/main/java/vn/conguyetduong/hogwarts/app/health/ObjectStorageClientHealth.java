@@ -31,13 +31,12 @@ public class ObjectStorageClientHealth implements HealthIndicator {
             InputStream is = new ByteArrayInputStream(content);
 
             objectStorageClient.putObject(bucket, objectName, is, content.length, "text/plain");
-            objectStorageClient.removeObject(bucket, objectName);
-            objectStorageClient.removeObject(bucket, objectName);
+            objectStorageClient.statObject(bucket, objectName);
 
             return Health.up()
                     .withDetail("ObjectStorageClient", objectStorageClient.getClass().getSimpleName())
                     .withDetail("bucket", bucket)
-                    .withDetail("operation", "upload/stat/delete")
+                    .withDetail("operation", "upload/stat")
                     .build();
 
         } catch (Exception e) {
