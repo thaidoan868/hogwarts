@@ -76,10 +76,10 @@ management:
 
 # Security Configuration
 keycloak:
-  server-url: http://internal-aws-internal-lb-970886254.ap-southeast-1.elb.amazonaws.com
+  server-url: http://localhost:8080
   realm: hogwarts
   client-id: backend
-  client-secret: hnqcclPCqxBt1WBWtJL3uNQP76xTbgDT
+  client-secret: APYtOv32HuVupfco6m0ltbf0RcXp1atx
 
 # Object Storage
 aws.s3:
